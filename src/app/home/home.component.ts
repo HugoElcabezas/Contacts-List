@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Contact } from 'src/models/contact.model';
-import { ContactService } from 'src/services/contact.service';
+import { ContactService } from 'src/app/services/contact.service';
 
 @Component({
   selector: 'app-home',
@@ -14,9 +14,11 @@ export class HomeComponent implements OnInit {
   constructor(private contactService: ContactService) { }
 
   ngOnInit() {
-    //this.getContacts();
+    this.getContacts();
     //this.getContact();
-    this.deleteContact();
+    //this.deleteContact();
+    //this.updateContact();
+    //this.addContact();
   }
 
   getContacts() {
@@ -40,6 +42,35 @@ export class HomeComponent implements OnInit {
       this.getContacts();
     }).catch((error) => {
       console.log(error);
+    });
+  }
+
+  updateContact() {
+    const newContact = {
+      id: '69',
+      name: 'Edited',
+      cel: '+52 1 (664) 205-1861',
+      mail: 'hugo.gomezllanos@cetys.edu.mx'
+    };
+    this.contactService.updateContact('69', newContact).then((res) => {
+      console.log(res);
+      this.getContacts();
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
+  addContact() {
+    const newContact: Contact = {
+      id: '7',
+      name: 'New',
+      cel: '+52 1 (664) 205-1861',
+      mail: 'hugo.gomezllanos@cetys.edu.mx'
+    };
+
+    this.contactService.addContact(newContact).then((res) => {
+      console.log(res);
+      this.getContacts();
     });
   }
 

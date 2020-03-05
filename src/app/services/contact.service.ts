@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Contact } from 'src/models/contact.model';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,36 @@ export class ContactService {
       } else {
         reject(false);
       }
+    });
+  }
+
+  updateContact(contactId: string, updatedContact: Contact): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      const updatedContacts = this.contacts.map((contact) => {
+        if (contact.id === contactId) {
+          const newContact = {
+            ...contact,
+            ...updatedContact
+          };
+          return newContact;
+        }
+        return contact;
+      });
+
+      if (JSON.stringify(updatedContacts) !== JSON.stringify(this.contacts)) {
+        this.contacts = updatedContacts;
+        resolve(true);
+      } else {
+        reject(false);
+      }
+    });
+  }
+
+  addContact(contact: Contact): Promise<boolean> {
+    return new Promise ((resolve, reject) => {
+      this.contacts.push(contact);
+
+      resolve(true);
     });
   }
 }
